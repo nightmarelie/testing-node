@@ -1,14 +1,9 @@
 // Testing Pure Functions
 import { isPasswordAllowed } from '../auth';
 
-test('isPasswordAllowed returns true for valid passwords', () => {
-  const validPasswords = ['!aBc123'];
-
-  validPasswords.forEach((p) => expect(isPasswordAllowed(p)).toBe(true));
-});
-
-test('isPasswordAllowed returns false for unvalid passwords', () => {
-  const unvalidPasswords = [
+describe('isPasswordAllowed only allow some password', () => {
+  const allowedPasswords = ['!aBc123'];
+  const disallowedPasswords = [
     'a2c!',
     '123456!',
     'ABCdef!',
@@ -17,5 +12,15 @@ test('isPasswordAllowed returns false for unvalid passwords', () => {
     'ABCdef123',
   ];
 
-  unvalidPasswords.forEach((p) => expect(isPasswordAllowed(p)).toBe(false));
+  allowedPasswords.forEach((p) => {
+    test(`allows ${p}`, () => {
+      expect(isPasswordAllowed(p)).toBe(true);
+    });
+  });
+
+  disallowedPasswords.forEach((p) => {
+    test(`disallows ${p}`, () => {
+      expect(isPasswordAllowed(p)).toBe(false);
+    });
+  });
 });

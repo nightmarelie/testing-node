@@ -1,16 +1,26 @@
-// Testing Middleware
+import { UnauthorizedError } from 'express-jwt';
+import errorMiddleware from '../error-middleware';
 
-// 💣 remove this todo test (it's only here so you don't get an error about missing tests)
-test.todo('remove me');
+test('responds with 401 for express-jwt UnauthorizedError', () => {
+  const req = {};
+  const res = {
+    json: jest.fn(() => res),
+    status: jest.fn(() => res),
+  };
+  const next = jest.fn();
 
-// 🐨 you'll need both of these:
-// import {UnauthorizedError} from 'express-jwt'
-// import errorMiddleware from '../error-middleware'
+  const error = new UnauthorizedError('fake_code', {
+    message: 'Fake Error Message',
+  });
 
-// 🐨 Write a test for the UnauthorizedError case
-// 💰 const error = new UnauthorizedError('some_error_code', {message: 'Some message'})
-// 💰 const res = {json: jest.fn(() => res), status: jest.fn(() => res)}
+  errorMiddleware(error, req, res, next);
 
-// 🐨 Write a test for the headersSent case
-
-// 🐨 Write a test for the else case (responds with a 500)
+  expect(next).not.toHaveBeenCalled();
+  expect(res.status).toHaveBeenCalledWith(401);
+  expect(res.status).toHaveBeenCalledTimes(1);
+  expect(res.json).toHaveBeenCalledWith({
+    code: error.code,
+    message: error.message,
+  });
+  expect(res.json).toHaveBeenCalledTimes(1);
+});

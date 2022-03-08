@@ -181,3 +181,5 @@ test('getListItems returns a users list items', async () => {
   });
   expect(res.json).toHaveBeenCalledTimes(1);
 });
+
+test('createListItem cretes and returns a list item', async () => {});

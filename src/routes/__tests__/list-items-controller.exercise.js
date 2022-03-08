@@ -111,3 +111,34 @@ test('setListItem returns a 404 error if the list item does not exist', async ()
   `);
   expect(res.json).toHaveBeenCalledTimes(1);
 });
+
+test('setListItem returns a 403 error if the list item not belong to the user', async () => {
+  const user = buildUser({ id: 'FAKE_USER_ID' });
+  const listItem = buildListItem({
+    ownerId: 'SOMEONE_ELSE_ID',
+    id: 'FAKE_LIST_ITEM_ID',
+  });
+
+  listItemsDB.readById.mockResolvedValueOnce(listItem);
+
+  const req = buildReq({ user, params: { id: listItem.id } });
+  const res = buildRes();
+  const next = buildNext();
+
+  await listItemsController.setListItem(req, res, next);
+
+  expect(listItemsDB.readById).toHaveBeenCalledWith(listItem.id);
+  expect(listItemsDB.readById).toHaveBeenCalledTimes(1);
+
+  expect(res.status).toHaveBeenCalledWith(403);
+  expect(res.status).toHaveBeenCalledTimes(1);
+
+  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "message": "User with id FAKE_USER_ID is not authorized to access the list item FAKE_LIST_ITEM_ID",
+      },
+    ]
+  `);
+  expect(res.json).toHaveBeenCalledTimes(1);
+});

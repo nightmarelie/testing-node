@@ -290,3 +290,26 @@ test('updateListItem update an existing list item', async () => {
 
   expect(res.json).toBeCalledTimes(1);
 });
+
+test('deleteListItem remove list item', async () => {
+  const user = buildUser();
+  const listItem = buildListItem({
+    ownerId: user.id,
+  });
+
+  listItemsDB.remove.mockResolvedValueOnce(listItem);
+
+  const req = buildReq({ listItem });
+  const res = buildRes();
+
+  await listItemsController.deleteListItem(req, res);
+
+  expect(listItemsDB.remove).toHaveBeenCalledWith(listItem.id);
+  expect(listItemsDB.remove).toHaveBeenCalledTimes(1);
+
+  expect(res.json).toBeCalledWith({
+    success: true,
+  });
+
+  expect(res.json).toBeCalledTimes(1);
+});

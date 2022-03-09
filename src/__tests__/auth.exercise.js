@@ -16,7 +16,7 @@ afterEach(() => resetDb());
 
 test('auth flow', async () => {
   const { username, password } = generate.loginForm();
-  const rResult = await axios.post('http://localhost:8000/api/auth/register', {
+  const rResult = await axios.post(`http://localhost:8000/api/auth/register`, {
     username,
     password,
   });

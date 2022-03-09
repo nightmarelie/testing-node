@@ -34,16 +34,12 @@ test('auth flow', async () => {
 
   expect(lResult.data.user).toEqual(rResult.data.user);
 
-  //
-  // login
-  // 🐨 use axios.post to post the username and password again, but to the login endpoint
-  // 💰 http://localhost:8000/api/auth/login
-  //
-  // 🐨 assert that the result you get back is correct
-  // 💰 tip: the data you get back is exactly the same as the data you get back
-  // from the registration call, so this can be done really easily by comparing
-  // the data of those results with toEqual
-  //
+  const meResult = await axios.get('http://localhost:8000/api/auth/me', {
+    headers: { Authorization: `Bearer ${lResult.data.user.token}` },
+  });
+
+  expect(meResult.data.user).toEqual(lResult.data.user);
+
   // authenticated request
   // 🐨 use axios.get(url, config) to GET the user's information
   // 💰 http://localhost:8000/api/auth/me

@@ -291,7 +291,7 @@ test('updateListItem update an existing list item', async () => {
   expect(res.json).toBeCalledTimes(1);
 });
 
-test('deleteListItem remove list item', async () => {
+test('deleteListItem deletes an existing list item', async () => {
   const user = buildUser();
   const listItem = buildListItem({
     ownerId: user.id,

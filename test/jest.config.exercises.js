@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   displayName: 'exercise',
@@ -18,4 +18,4 @@ module.exports = {
     require.resolve('jest-watch-typeahead/filename'),
     require.resolve('jest-watch-typeahead/testname'),
   ],
-}
+};

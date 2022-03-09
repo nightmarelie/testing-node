@@ -16,18 +16,23 @@ afterEach(() => resetDb());
 
 test('auth flow', async () => {
   const { username, password } = generate.loginForm();
-  const response = await axios.post('http://localhost:8000/api/auth/register', {
+  const rResult = await axios.post('http://localhost:8000/api/auth/register', {
     username,
     password,
   });
 
-  console.log(response.data);
-
-  expect(response.data.user).toEqual({
+  expect(rResult.data.user).toEqual({
     token: expect.any(String),
     id: expect.any(String),
     username,
   });
+
+  const lResult = await axios.post('http://localhost:8000/api/auth/login', {
+    username,
+    password,
+  });
+
+  expect(lResult.data.user).toEqual(rResult.data.user);
 
   //
   // login
